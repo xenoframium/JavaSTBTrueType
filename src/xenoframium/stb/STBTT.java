@@ -1070,9 +1070,9 @@ public class STBTT {
             return stbtt__GetGlyphShapeT2(info, glyph_index, pvertices);
     }
 
-    static void stbtt__rasterize(TTBitmap result, TTPoint[] pts, int[] wcount, int windings, float scale_x, float scale_y, float shift_x, float shift_y, int off_x, int off_y, int invert)
+    static void stbtt__rasterize(TTBitmap result, TTPoint[] pts, int[] wcount, int windings, float scale_x, float scale_y, float shift_x, float shift_y, int off_x, int off_y, boolean invert)
     {
-        float y_scale_inv = invert != 0 ? -scale_y : scale_y;
+        float y_scale_inv = invert ? -scale_y : scale_y;
         TTEdge[] e;
         int n,i,j,k,m;
         int vsubsample = 1;
@@ -1102,7 +1102,7 @@ public class STBTT {
                     continue;
                 // add edge from j to k to the list
                 e[n].invert = 0;
-                if (invert != 0 ? p[j+l].y > p[k+l].y : p[j+l].y < p[k+l].y) {
+                if (invert ? p[j+l].y > p[k+l].y : p[j+l].y < p[k+l].y) {
                     e[n].invert = 1;
                     a=j;
                     b=k;
@@ -1520,7 +1520,7 @@ public class STBTT {
         gbm.stride = out_stride;
 
         if (gbm.w != 0 && gbm.h != 0)
-            stbtt_Rasterize(gbm, 0.35f, vertices, num_verts, scale_x, scale_y, shift_x, shift_y, ix0[0], iy0[0], 1);
+            stbtt_Rasterize(gbm, 0.35f, vertices, num_verts, scale_x, scale_y, shift_x, shift_y, ix0[0], iy0[0], true);
 
     }
 
@@ -1676,7 +1676,7 @@ public class STBTT {
         return points;
     }
 
-    public static void stbtt_Rasterize(TTBitmap result, float flatness_in_pixels, TTVertex[] vertices, int num_verts, float scale_x, float scale_y, float shift_x, float shift_y, int x_off, int y_off, int invert)
+    public static void stbtt_Rasterize(TTBitmap result, float flatness_in_pixels, TTVertex[] vertices, int num_verts, float scale_x, float scale_y, float shift_x, float shift_y, int x_off, int y_off, boolean invert)
     {
         float scale = scale_x > scale_y ? scale_y : scale_x;
         int[] winding_count = {0};
